@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加管理员</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="/static/X-admin/css/font.css">
+    <link rel="stylesheet" href="/static/X-admin/css/xadmin.css">
+    <script type="text/javascript" src="/static/X-admin/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/X-admin/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label for="username" class="layui-form-label">
+                    <span class="x-red">*</span>登录名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="username" name="username" required=""
+                           lay-verify="required" autocomplete="off" class="layui-input"
+
+                    >
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>将会成为您唯一的登入名
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="real_name" class="layui-form-label">
+                    <span class="x-red">*</span>真实姓名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="real_name" name="real_name" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">
+                    <span class="x-red">*</span>密码
+                </label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_pass" name="pass" required="" lay-verify="pass" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    6到12个字符
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">
+                    <span class="x-red">*</span>确认密码
+                </label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_repass" name="repass" required="" lay-verify="repass" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="level" class="layui-form-label">
+                    <span class="x-red">*</span>管理员等级
+                </label>
+                <div class="layui-input-inline">
+                    <select name="level" id="level">
+                        <option value="">请选择</option>
+                        {if $level eq 0}
+                        <option value="1">高级管理员</option>
+                        <option value="2">普通管理员</option>
+                        {else}
+                        <option value="2">普通管理员</option>
+                        {/if}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" for="identity"><span class="x-red">*</span>管理员角色</label>
+                <div class="layui-input-block" style="width: 190px" name="identity[]">
+                    {foreach $adminIdentity as $ad}
+                    <input name="identity[]" id="identity[]" type="checkbox" value='{$ad['identity_id']}' title={$ad['title']}>
+                    {/foreach}
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" for="status"><span class="x-red">*</span>管理员状态</label>
+                <div class="layui-input-block" style="width: 190px">
+                    <select name="status" id="status">
+                        <option value="">请选择</option>
+                        <option value="1">启用</option>
+                        <option value="0">禁止</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+        <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button  class="layui-btn" lay-filter="add" lay-submit="" onclick="save()">
+                添加管理员
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form'], function(){
+        form = layui.form;
+        layer = layui.layer;
+});
+      //自定义验证规则
+        function save(){
+            var username = $.trim($('input[name="username"]').val());
+            var pass = $.trim($('input[name="pass"]').val());
+            var real_name = $.trim($('input[name="real_name"]').val());
+            var level = $.trim($('input[name="level"]').val());
+            var identity = $.trim($('input[name="identity"]').val());
+            var status = $.trim($('input[name="status"]').val());
+            if(username==''){
+                layer.alert('请输入用户名',{icon:2});
+                return;
+            }
+            if (username.length < 5) {
+                layer.alert('管理员账号至少五个字符',{icon:2});
+                return;
+            }
+            if(pass==''){
+                layer.alert('请输入密码',{icon:2});
+                return;
+            }
+            if(pass.length<6||pass.length>12){
+                layer.alert('密码必须6到12位',{icon:2});
+                return;
+            }
+            if ($('#L_pass').val() != $('#L_repass').val()) {
+                layer.alert('两次密码不一致',{icon:2});
+                return;
+            }
+
+
+            $.post('/admin.php/AdminManage/save',$('form').serialize(),function(res){
+                if(res.code>0){
+                    layer.alert(res.msg,{icon:2});
+                }else{
+                    layer.alert(res.msg);
+                    setTimeout(function(){parent.window.location.reload();},1000);
+                }
+            },'json');
+        }
+</script>
+</body>
+</html>
