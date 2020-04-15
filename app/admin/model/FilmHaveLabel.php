@@ -4,7 +4,6 @@ namespace app\admin\model;
 use think\Model;
 use app\admin\model\Film;
 use app\admin\model\Label;
-use think\log\Channel;
 
 /*影片拥有标签表*/
 
@@ -22,8 +21,6 @@ class FilmHaveLabel extends Model
         $where = 'label_id in('.implode(',',$v['label_id']).') and status=1';
         $v['label'] = Label::where($where)->column('title,flag');
         }
-        var_dump($film);
-        die();
         return $film;
     }
 }

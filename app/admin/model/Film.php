@@ -8,7 +8,7 @@ class Film extends Model
 {
     static public function get_all()
     {
-        $film = Film::where('status',1)->select();
+        $film = Film::select();
         return $film->toArray();
     }
 }

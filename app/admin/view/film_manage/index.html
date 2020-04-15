@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>权限管理</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi，shrink-to-fit=no" />
+        <link rel="stylesheet" href="/static/X-admin/css/font.css">
+        <link rel="stylesheet" href="/static/X-admin/css/xadmin.css">
+        <script src="/static/X-admin/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/X-admin/js/xadmin.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="contain">
+    <div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a>
+                <cite>影片管理</cite>
+            </a>
+          </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+            <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <button class="layui-btn" onclick="xadmin.open('添加影片','/admin.php/FilmManage/add',600,400)"><i class="layui-icon"></i>添加</button>
+                    <div class="layui-card-body table-responsive">
+                            <table class="layui-table layui-form table">
+                            <thead>
+                            <tr style="font-weight: 900;">
+                                <th>ID</th>
+                                <th>影片名称</th>
+                                <th>关键字</th>
+                                <th>描述</th>
+                                <th>标签</th>
+                                <th>播放量</th>
+                                <th>评分</th>
+                                <th>是否vip影片</th>
+                                <th>状态</th>
+                                <th>添加时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach $film as $ad}
+                        <tr>
+                            <td>{$ad['film_id']}</td>
+                            <td>{$ad['title']}</td>
+                            <td>{$ad['keywords']}</td>
+                            <td>{$ad['desc']}</td>
+                            <td>
+                                {foreach $ad['label'] as $key=>$v}
+                                {$v['title']}
+                                {/foreach}
+                            </td>
+                            <td>{$ad['pv']}</td>
+                            <td>{$ad['score']}</td>
+                            {if $ad['is_vip'] eq 1}
+                            <td>vip影片</td>
+                            {else}
+                            <td>免费影片</td>
+                            {/if}
+                            <td>{if($ad['status'])==1}
+                                <span class="layui-btn  layui-btn-small" title="正在热播">正在热播</span>
+                                {else if}
+                                <span class="layui-btn  layui-btn-small" style="background-color: red" title="已下线">已下线</span>
+                                {/if}
+                            </td>
+                            <td>{$ad['add_time']|date="Y-m-d,H:m:s"}</td>
+                            <!--操作栏-->
+                            <td class="td-manage">
+                                <a title="编辑"  onclick="xadmin.open('编辑','/admin.php/FilmManage/edit?id='+{$ad['film_id']})" href="javascript:;" style="margin-right: 10px">
+                                    <i class="layui-icon">&#xe642;</i>
+                                </a>
+                                <a title="删除" onclick="member_del({$ad['film_id']})" href="javascript:;">
+                                    <i class="layui-icon">&#xe640;</i>
+                                </a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+<script>
+    layui.use(['laydate','form'], function(){
+        var laydate = layui.laydate;
+        var form = layui.form;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+
+    /*用户-删除*/
+    function member_del(id){
+        layer.confirm('确认要删除吗？', {
+            btn: ['确定', '取消']
+        },function(){
+                //发异步删除数据
+                $.post('/admin.php/FilmManage/del',{'id':id},function(res){
+                    if(res.code>0){
+                        layer.alert(res.msg,{icon:2});
+                    }else{
+                        layer.msg(res.msg);
+                        setTimeout(function(){window.location.reload();},1000);
+                }
+                },'json');
+            });
+    }
+</script>
+</body>
+</html>
