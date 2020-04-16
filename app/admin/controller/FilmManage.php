@@ -31,14 +31,15 @@ class FilmManage extends baseAdmin
             mkdir('uploads');
         }
         $path = "uploads/".$_FILES["file"]["name"];
+        // var_dump($path);
         move_uploaded_file($_FILES["file"]["tmp_name"],$path);
         $ext = ($_FILES["file"]["type"]);
 		if(!in_array($ext,array('image/jpg','image/jpeg','image/gif','image/png'))){
 			exit(json_encode(array('code'=>1,'msg'=>'文件格式不支持')));
         }
-        // $img = '/uploads/'.$path->getSaveName();
+        $img = 'http://www.bestvoid.com/'.$path; //将反斜杆转为正斜杠
         // var_dump($img);
         // die();
-        exit(json_encode(array('code'=>0,'msg'=>$path)));
+        exit(json_encode(array('code'=>0,'msg'=>$img)));
     }
 }
