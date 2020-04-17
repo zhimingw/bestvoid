@@ -11,4 +11,9 @@ class Film extends Model
         $film = Film::select();
         return $film->toArray();
     }
+    static public function get_film_info($film_id)
+    {
+        $film_info = Film::where('film_id',$film_id)->find();
+        return $film_info->toArray();
+    }
 }

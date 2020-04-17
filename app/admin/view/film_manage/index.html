@@ -32,7 +32,7 @@
         <div class="layui-row layui-col-space15">
             <div class="layui-col-md12">
                 <div class="layui-card">
-                    <button class="layui-btn" onclick="xadmin.open('添加影片','/admin.php/FilmManage/add',600,400)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加影片','/admin.php/FilmManage/add',800,500)"><i class="layui-icon"></i>添加</button>
                     <div class="layui-card-body table-responsive">
                             <table class="layui-table layui-form table">
                             <thead>
@@ -78,7 +78,7 @@
                             <td>{$ad['add_time']|date="Y-m-d,H:m:s"}</td>
                             <!--操作栏-->
                             <td class="td-manage">
-                                <a title="编辑"  onclick="xadmin.open('编辑','/admin.php/FilmManage/edit?id='+{$ad['film_id']})" href="javascript:;" style="margin-right: 10px">
+                                <a title="编辑"  onclick="xadmin.open('编辑','/admin.php/FilmManage/edit?film_id='+{$ad['film_id']})" href="javascript:;" style="margin-right: 10px">
                                     <i class="layui-icon">&#xe642;</i>
                                 </a>
                                 <a title="删除" onclick="member_del({$ad['film_id']})" href="javascript:;">
@@ -111,12 +111,12 @@
     });
 
     /*用户-删除*/
-    function member_del(id){
+    function member_del(film_id){
         layer.confirm('确认要删除吗？', {
             btn: ['确定', '取消']
         },function(){
                 //发异步删除数据
-                $.post('/admin.php/FilmManage/del',{'id':id},function(res){
+                $.post('/admin.php/FilmManage/del',{'film_id':film_id},function(res){
                     if(res.code>0){
                         layer.alert(res.msg,{icon:2});
                     }else{

@@ -19,4 +19,21 @@ class Label extends Model
         $area = $Label->where('flag','area')->order('ord')->select();
         return $area->toArray();
     }
+    static public function film_have_label_insert($label,$add_id){
+        $result = [];
+        foreach($label as $key=>$v){
+            $result = array_merge($v,$result);
+        }
+        $data['label_id']=json_encode($result,true);
+        $data['film_id']=$add_id;
+        FilmHaveLabel::insert($data);
+    }
+    static public function film_have_label_update($label,$update_id){
+        $result = [];
+        foreach($label as $key=>$v){
+            $result = array_merge($v,$result);
+        }
+        $data['label_id']=json_encode($result,true);
+        FilmHaveLabel::where('film_id',$update_id)->update($data);
+    }
 }
