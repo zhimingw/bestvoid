@@ -15,9 +15,13 @@ class FilmManage extends baseAdmin
     //显示影片
     public function index(){
         $film = FilmHaveLabel::get_film_label();
+        $page = Film::get_page();
         // var_dump($film);
         // die();
-        View::assign('film',$film);
+        View::assign([
+            'page'=>$page,
+            'film'=>$film
+            ]);
         return View::fetch();
     }
     //添加影片
@@ -61,7 +65,6 @@ class FilmManage extends baseAdmin
         // var_dump($data);
         // die();
         View::assign('data',$data);
-        return View::fetch();
         return View::fetch();
     }
     //保存影片

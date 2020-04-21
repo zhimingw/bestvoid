@@ -26,7 +26,6 @@
 			<label class="layui-form-label">频道</label>
 			<div class="layui-input-inline">
 				<select name="channel_id">
-					<option value="0">请选择</option>
 					{volist name="data.channel" id="vo_channel"}
 					<option value={$vo_channel.label_id}>{$vo_channel.title}</option>
 					{/volist}
@@ -36,7 +35,6 @@
 			<label class="layui-form-label">资费</label>
 			<div class="layui-input-inline">
 				<select name="charge_id">
-					<option value="0">请选择</option>
 					{volist name="data.charge" id="vo_charge"}
 					<option value={$vo_charge.label_id}>{$vo_charge.title}</option>
 					{/volist}
@@ -47,7 +45,6 @@
 			<label class="layui-form-label">地区</label>
 			<div class="layui-input-inline">
 				<select name="area_id">
-					<option value="0">请选择</option>
 					{volist name="data.area" id="vo_area"}
 					<option value={$vo_area.label_id}>{$vo_area.title}</option>
 					{/volist}
@@ -56,7 +53,7 @@
 			<label class="layui-form-label">&nbsp;</label>
 			<div class="layui-input-inline">
 				<button class="layui-btn layui-btn-sm" onclick="return false;" id="upload_img"><i class="layui-icon">&#xe67c;</i>上传图片</button>
-				<img id="pre_img"  style="height: 30px;" />
+				<img  id="pre_img"  <?php if($film_info['img']){echo 'src="'.$film_info['img'].'"';}?> style="height: 60px;" />
 				<input type="hidden" name="img">
 			</div>
 		</div>
